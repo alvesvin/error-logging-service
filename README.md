@@ -26,6 +26,7 @@ Based on the the questionaire, I'm going to propose a reduced architecture that 
 
 ### Tech Stack
 
+- TypeScript: Type safety for JavaScript
 - NestJS: Leading backend framework for NodeJS, a lot of pre-built components and well-thought patterns.
 - NextJS: Leading frontend framework, powerful, flexible and industry standard.
 - PostgreSQL: A powerful, flexible, open source, relational database. Gives us a room for improvements and has a lot of features.
@@ -33,6 +34,7 @@ Based on the the questionaire, I'm going to propose a reduced architecture that 
 - Docker: For building and deploying containers.
 - AWS: For cloud solutions. Cheaper than alternatives, easier to manage, and industry leading.
 - NGINX: For load balancing and reverse proxying.
+- RESTful API: Standard, even though GraphQL is awesome for end-to-end type safety
 
 ### Libs and third-party services
 
@@ -43,7 +45,70 @@ Based on the the questionaire, I'm going to propose a reduced architecture that 
 - Resend: email service
 - shadcn/ui: for UI components
 - Own Service: for error logging
+- Graphana: for infrastructure monitoring
 
 ### Architecture Diagram
 
-![Architecture Diagram](https://github.com/plugify/error-logging-service/blob/master/docs/images/architecture.png)
+![Architecture Diagram](./infrastructure.png)
+
+## Database Diagram
+
+![Database Diagram](./database.png)
+
+## REST API
+
+- Rate limiting per api key depending on the pricing tier
+
+### Specification
+
+- Authentication handled by Clerk
+- POST /projects
+- GET /projects
+- PUT /projects
+- POST /logs
+- GET /logs?project_id=&start_date=&end_date=&limit=&page=
+- GET /logs/:id
+- POST /alerts/rules
+- GET /alerts/rules?project_id=
+- GET /alerts/rules/:id
+- PUT /alerts/rules
+- GET /alerts?project_id=
+- GET /alerts/:id
+
+## Client SDK
+
+### JavaScript SDK
+
+- Compatible with browser and backend environments
+- Log filter to prevent exposing sensitive information
+- Middleware for Express that captures HTTP headers and request information
+- NextJS support with thrid-party script blocking prevention
+
+**API**
+
+createClient('api-key', options): Client  
+captureException(Error, options): Promise<Log>
+
+## Web Dashboard
+
+- UI similar to Sentry
+- Use of NextJS's App Router features (Server Components, Layouts, Route Cache, etc)
+- Error boundaries and loading states
+- Ability to invite organization members
+- Ability to create alert rules
+- Ability to visualize and filter logs in a centralized page with a table view
+- Role-based access control
+- WebSocket connction to get real-time error updates
+
+
+## General Considerations
+
+I strongly believe in starting simple and iterate fast through the evolution of the project.  
+
+One of my knowledge gaps is in monitoring the infrastructure effectivelly with Grafana and other tools. This is something I would benefit a lot from my team mates help.  
+
+Points of improvement I have in mind is adding a cache for the logs and better searchability with techniques like full-text search.  
+
+Error stack traces may be gigantic which would require some compression or streaming data in chunks.  
+
+We could log to a file instead of storing everything in Postgres that would probably improve database performance and availability.  
