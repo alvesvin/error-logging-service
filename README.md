@@ -101,7 +101,7 @@ captureException(Error, options): Promise<Log>
 - Ability to create alert rules
 - Ability to visualize and filter logs in a centralized page with a table view
 - Role-based access control
-- WebSocket connction to get real-time error updates
+- WebSocket connection to get real-time error updates
 
 ## Security
 
@@ -122,4 +122,3 @@ One point of improvement I have in mind is adding a cache for the logs and bette
 Error stack traces may be gigantic which would require some compression or streaming data in chunks.
 
 We could log to a file instead of storing everything in Postgres, that would probably improve database performance and availability.
-
