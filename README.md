@@ -58,6 +58,8 @@ Based on the the questionaire, I'm going to propose a reduced architecture that 
 ## REST API
 
 - Rate limiting per api key depending on the pricing tier
+- The API is platform agnostic, so it can be used by any client SDK
+- Event-based architecture
 
 ### Specification
 
@@ -83,6 +85,7 @@ Based on the the questionaire, I'm going to propose a reduced architecture that 
 - Log filter to prevent exposing sensitive information
 - Middleware for Express that captures HTTP headers and request information
 - NextJS support with thrid-party script blocking prevention
+- We'd need to be careful to not add too much overhead to the client
 
 **API**
 
@@ -100,15 +103,23 @@ captureException(Error, options): Promise<Log>
 - Role-based access control
 - WebSocket connction to get real-time error updates
 
+## Security
+
+- Role-based access control
+- Log filter to prevent exposing sensitive information
+- GDPR compliance
+- Log retention policies defined by the organization administrator
+- Log encryption for enterprise level
 
 ## General Considerations
 
-I strongly believe in starting simple and iterate fast through the evolution of the project.  
+I strongly believe in starting simple and iterate fast through the evolution of the project.
 
-One of my knowledge gaps is in monitoring the infrastructure effectivelly with Grafana and other tools. This is something I would benefit a lot from my team mates help.  
+One of my knowledge gaps is in monitoring the infrastructure effectivelly with Grafana and other tools. This is something I would benefit a lot from my team mates help.
 
-Points of improvement I have in mind is adding a cache for the logs and better searchability with techniques like full-text search.  
+One point of improvement I have in mind is adding a cache for the logs and better searchability with techniques like full-text search.
 
-Error stack traces may be gigantic which would require some compression or streaming data in chunks.  
+Error stack traces may be gigantic which would require some compression or streaming data in chunks.
 
-We could log to a file instead of storing everything in Postgres that would probably improve database performance and availability.  
+We could log to a file instead of storing everything in Postgres, that would probably improve database performance and availability.
+
